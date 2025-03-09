@@ -1,4 +1,4 @@
-# MedRBench 
+# MedR-Bench 
 The official code for "Quantifying the Reasoning Abilities of LLMs on Real-world Clinical Cases".
 
 ## Introduction
