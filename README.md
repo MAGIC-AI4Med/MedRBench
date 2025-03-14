@@ -1,12 +1,16 @@
 # MedR-Bench 
 The official code for "Quantifying the Reasoning Abilities of LLMs on Real-world Clinical Cases".
 
+[Paper (Arxiv version)](https://arxiv.org/abs/2503.04691)
+
 ## Introduction
 In this paper, we assess the quality of reasoning processes in Large Language Models (LLMs) within real-world medical contexts. Our contributions are as follows:
 
 1. We present the first quantitative analysis focused on **LLM reasoning process quality** in clinical scenarios—a domain inherently rich with ground-truth reasoning processes such as differential diagnosis. Our evaluation encompasses cutting-edge reasoning models, including Deepseek-R1, OpenAI's o3-mini, and others.
 2. We have developed **MedR-Bench**, a benchmark for evaluating reasoning performance based on PMC-OA case reports. This benchmark is specifically designed to mirror the complexities of authentic clinical scenarios.
 3. We introduce an innovative agentic system, the **Reasoning Evaluator**, engineered to automate and objectively quantify free-text reasoning responses in a scalable and efficient manner.
+
+![](assets/teaser.png)
 
 ## Files Organsization
 ```
