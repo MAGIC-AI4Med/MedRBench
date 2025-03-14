@@ -1,0 +1,19 @@
+Please carefully study the following patient case summary, conduct a comprehensive and in-depth diagnostic analysis, and clearly provide the final diagnosis result.
+
+{case}
+
+---
+
+**Format to Follow:**
+
+```
+### Resoning:
+[Please sort out your thinking process step by step, with each logical step in a separate paragraph.]
+<step 1> Specific thinking content of this step
+<step 2> Specific thinking content of this step
+...
+<step n> Specific thinking content of this step
+
+### Answer:
+[Just output the diagnostic result without any other explanation.]
+```

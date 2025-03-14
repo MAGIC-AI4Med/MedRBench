@@ -1,0 +1,19 @@
+Please carefully study the following patient case summary, conduct a comprehensive and in-depth treatment planning analysis, and clearly provide the selected treatment for the patient.
+
+{case}
+
+---
+
+**Format to Follow:**
+
+```
+### Chain of Thought:
+[Please sort out your thinking process step by step, with each logical step in a separate paragraph, and use a format such as <step 1> to label each step.]
+<step 1> Specific thinking content of this step
+<step 2> Specific thinking content of this step
+...
+<step n> Specific thinking content of this step
+
+### Answer:
+[Just output the selected treatment for the patient without any other explanation.]
+```

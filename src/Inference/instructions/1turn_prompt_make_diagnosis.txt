@@ -1,0 +1,21 @@
+Please make a final diagnosis for the patient in light of the additional information provided below.
+
+Additional Information:
+{additional_information}
+
+Guidelines:
+- Evaluate the patient's symptoms, medical history, and all pertinent details from the case summary.
+- Formulate differential diagnoses based on your analysis.
+
+Always following the response format in each turn of the dialogue, never change the section of ### format: 
+```
+### Chain of Thought:
+[Please sort out your thinking process step by step, with each logical step in a separate paragraph, and use a format such as <step 1> to label each step.]
+<step 1> Specific thinking content of this step
+<step 2> Specific thinking content of this step
+...
+<step n> Specific thinking content of this step
+
+### Conclusion:
+[Directly output the diagnostic result without any other explanation.]
+```

@@ -1,0 +1,27 @@
+Here is the additional information you required. Please proceed with the analysis.
+
+Additional Information:
+{additional_information}
+
+Always following the response format in each turn of the dialogue, never change the section of ### format: 
+```
+### Chain of Thought:
+[Please sort out your thinking process step by step, with each logical step in a separate paragraph, and use a format such as <step 1> to label each step.]
+<step 1> Specific thinking content of this step
+<step 2> Specific thinking content of this step
+...
+<step n> Specific thinking content of this step
+
+### Additional Information Required:
+[Indicate if further information is needed by specifying the required tests or data. If a conclusive diagnosis has been made and no additional information is necessary, only output "Not required." directly without any other words in this section.]
+For example:
+Not required.
+
+or
+
+1. Laboratory tests: details
+2. Imaging: details
+
+### Conclusion:
+[If do not require additional information, please provide a final conclusive diagnosis. Otherwise, summarize the current findings.]
+...
