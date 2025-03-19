@@ -1,0 +1,33 @@
+# Task Overview
+Given a medical treatment analysis problem with multiple reasoning steps[Text to be organized], reorganize it into clearly structured steps, separated by newline characters.
+
+# Organization Requirements
+Convert the original solution into a clear, structured reasoning process, while ensuring:
+- All original key information are preserved, but if multiple sentences discuss the same topic or serve the same logical reasoning purpose, they can be combined into one reasoning step.
+- No new explanations or reasoning are added.
+- No steps are omitted.
+
+## Requirements
+- Each step must be atomic (one conclusion per step).
+- There should be no content repetition between steps.
+- The final answer determination is also considered a step in the logical reasoning.
+
+
+# Output Requirements
+1.There should be no newline characters within each step, and each step should be separated by a single newline character.
+2.For highly repetitive reasoning patterns, output them as a single step.
+3.Output a maximum of 10 steps.
+
+
+## Output Format
+<Step 1> Content of this reasoning step...
+<Step 2> Content of this reasoning step...
+...
+<Step n> Content of this reasoning step...
+
+
+
+Below is the text that needs to be reorganized into reasoning steps:
+
+[Text to be organized]
+{gt_reasoning}

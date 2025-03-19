@@ -1,0 +1,20 @@
+# Task Overview
+Given a reasoning step from a medical case analysis problem, determine whether it appears or is covered in the reference reasoning process.
+
+# Task Requirements
+Evaluate whether the content of the step to be analyzed is the same as or related to any step in the reference reasoning process. Or whether the reference reasoning process covers the core meaning or logic expressed in the reasoning step to be analyzed.
+
+# Output Requirements
+Only output your judgment result on [the reasoning step to be analyzed], with optional values “Yes|No”, do not output any other content.
+
+# Output Format
+[Yes|No]
+
+
+Below is the reasoning step to be analyzed and the reference reasoning process:
+
+[Reasoning Step to be Analyzed]
+{a_reasoning_step}
+
+[Reference Reasoning Process]
+{out_reasoning}

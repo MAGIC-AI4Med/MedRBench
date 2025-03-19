@@ -1,0 +1,30 @@
+# Task Description
+Please analyze and determine the type of the current thinking step based on the provided medical case analysis process, all previous thinking steps, the known patient medical record, and the final reasoning goal. The current thinking step should be classified into one of the following types:
+
+1.Citation: A simple citation, summary, or restatement of information from the patient’s medical record, without generating new reasoning or conclusions.
+2.Repetition: A repetition of previous thinking processes, without providing new information or advancing the reasoning process.
+3.Reasoning: Providing information beyond what is known, or deriving new conclusions from known information, or proposing new possibilities, which moves the thinking process towards the correct answer and has a direct or indirect effect on the final reasoning goal.
+4.Redundancy: Providing new information or possibilities that do not help in reaching the final answer and do not advance the reasoning process.
+
+# Note
+When determining the type, ensure to fully consider the logical relationship and reasoning process between the current thinking step, previous thinking steps, the patient’s medical record, and the reasoning goal. If the current thinking step corresponds to multiple types, select the most appropriate one based on its contribution to the reasoning goal. Maintain objectivity and accuracy in judgment, avoiding subjective assumptions.
+
+# Output Requirements
+Only output your classification of the current thinking step, with possible values being “Citation|Repetition|Reasoning|Redundancy”. Do not output any other content.
+
+# Output Format
+[Citation|Repetition|Reasoning|Redundancy]
+
+Now, please classify the following input based on the instructions above:
+
+[Current Thinking Step]
+{current_step}
+
+[All Previous Thinking Steps]
+{previous_steps}
+
+[Known Patient Medical Record]
+{case}
+
+[Final Reasoning Goal]
+{result}

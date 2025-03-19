@@ -1,0 +1,34 @@
+# Task Description
+You will receive three types of content:
+-Patient Case Summary: A summary containing key information about the patient, including basic information, medical history, examination results, etc.
+-Text Description to be Judged: A medical text description regarding the patient’s condition, diagnosis, or treatment, which you need to judge for its medical knowledge.
+-Known Correct Information: Verified correct medical knowledge related to the above text description, serving as a reference for your judgment.
+
+Your task is to deeply analyze the provided text description[Text Description to be Judged], judge whether its description of the involved medical knowledge is accurate, and whether the key medical facts supporting the logical reasoning are correct. Please proceed as follows:
+
+1.Judge the correctness of the description based on the [Patient Case Summary], [Known Correct Information], and your medical knowledge;
+2.If you are still uncertain about a particular description, list search keywords specific to that description. The listed search keywords should be targeted and accurate, helping to further verify the uncertain description.
+
+# Output Requirements
+1.The output format must be valid JSON format, with no other content.
+2.Output your judgment in the judgment field, with optional values “Correct|Wrong|Search”.
+3.If further search is needed, list the search keywords for the questions you are uncertain about in the keywords_to_search field. If the judgment is “Correct” or “Wrong”, this field should be “None”.
+
+
+# Format to Follow:
+```
+{{
+"judgment": "Correct|Wrong|Search",
+"keywords_to_search": "None|keywords",
+}}
+```
+
+Below is the patient information, known correct information, and the text description that needs to be judged for the patient:
+[Patient Case Summary]
+{case}
+
+[Known Correct Information]
+{info}
+
+[Text Description to be Judged]
+{reasoning_step}
