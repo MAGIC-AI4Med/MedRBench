@@ -1,75 +1,25 @@
 import os
 import json
 import argparse
+import logging
 import multiprocessing
-from utils import workflow
-from web_search import BingSearchTool
+from metrics.outcome_accuracy_eval import eval_accuracy_with_websearch
 
 # Configuration constants
 NUM_WORKERS = 4  # Number of parallel worker processes
 EVALUATION_MODEL = "gpt-4o-2024-11-20"  # Language model used for evaluation
 
-def load_instruction(file_path):
-    """Load instruction text from file.
-    
-    Args:
-        file_path: Path to the instruction template file
-        
-    Returns:
-        String containing the instruction template
-    """
-    with open(file_path, 'r', encoding='utf-8') as fp:
-        return fp.read()
-
-def evaluate_accuracy(prediction, ground_truth, case_info):
-    """Evaluate the accuracy of a treatment prediction against ground truth.
-    
-    Args:
-        prediction: Model's predicted treatment plan
-        ground_truth: Ground truth treatment plan
-        case_info: Additional case information for context
-        
-    Returns:
-        Tuple containing (keywords, search_results, is_correct_boolean)
-    """
-    # Extract answer content if needed
-    if '### Answer' in prediction:
-        prediction = prediction.split('### Answer')[-1].replace('\n', '').replace(':', '')
-
-    # Generate keywords for information retrieval
-    keywords_prompt_template = load_instruction('./instruction/keywords-en-treatment-acc.txt')
-    keywords_prompt = keywords_prompt_template.format(info=case_info)
-    system_prompt = 'You are a professional evaluator of medical knowledge.'
-    keywords = workflow(model_name=EVALUATION_MODEL, instruction=system_prompt, input_text=keywords_prompt)
-    
-    # Retrieve relevant medical information
-    search_results = BingSearchTool(keywords, return_num=3)
-   
-    # Evaluate accuracy with retrieved information
-    evaluation_template = load_instruction('./instruction/acc-en-treatment.txt')
-    evaluation_prompt = evaluation_template.format(
-        pred_treatment=prediction, 
-        gt_treatment=ground_truth, 
-        additional_info=search_results
-    )
-    system_prompt = 'You are a professional medical diagnosis evaluation system.'
-    evaluation_result = workflow(model_name=EVALUATION_MODEL, instruction=system_prompt, input_text=evaluation_prompt)
-    
-    is_correct = 'correct' in evaluation_result.lower()
-    return keywords, search_results, is_correct
+# Set up simple logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]
+)
+logger = logging.getLogger(__name__)
 
 def evaluate_case(case_data, output_directory, model_name):
-    """Evaluate a single case and save results.
-    
-    Args:
-        case_data: Dictionary containing case information and model outputs
-        output_directory: Directory to save evaluation results
-        model_name: Name of the model being evaluated
-        
-    Returns:
-        None (results are saved to disk)
-    """
-    print(f'Evaluating case {case_data["id"]} for model {model_name}')
+    """Evaluate a single case and save results."""
+    logger.info(f'Evaluating case {case_data["id"]} for model {model_name}')
 
     try:
         # Extract case information components
@@ -84,13 +34,17 @@ def evaluate_case(case_data, output_directory, model_name):
 
         # Get ground truth and model prediction
         ground_truth = case_data['generate_case']['treatment_plan_results']
-        model_prediction = case_data['results']['content']
+        model_prediction_raw = case_data['results']['content']
         
-        # Evaluate accuracy
-        keywords, search_results, is_accurate = evaluate_accuracy(
+        # Extract the answer part if it contains the specific format
+        model_prediction = model_prediction_raw.split('### Answer').split('### Answer:')[1].strip()
+        
+        # Evaluate accuracy using imported function
+        keywords, search_results, is_accurate = eval_accuracy_with_websearch(
             model_prediction, 
             ground_truth, 
-            case_context
+            case_context,
+            evaluation_model=EVALUATION_MODEL
         )
 
         # Store evaluation results
@@ -106,38 +60,21 @@ def evaluate_case(case_data, output_directory, model_name):
             json.dump(case_data, f, ensure_ascii=False, indent=4)
             
     except Exception as e:
-        print(f'Error processing case {case_data["id"]}: {str(e)}')
-    
+        logger.error(f'Error processing case {case_data["id"]}: {str(e)}')
+
 
 def worker_process(task_queue):
-    """Process evaluation tasks from a queue.
-    
-    Args:
-        task_queue: Queue containing evaluation tasks
-        
-    Returns:
-        None
-    """
+    """Process evaluation tasks from a queue."""
     while not task_queue.empty():
         try:
             case_data, output_directory, model_name = task_queue.get()
             evaluate_case(case_data, output_directory, model_name)
         except Exception as e:
-            print(f"Worker error: {e}")
+            logger.error(f"Worker error: {e}")
+
 
 def main(model_name, patient_case_filepath, model_output_filepath, output_directory, use_parallel=True):
-    """Orchestrate the evaluation process for a specific model.
-    
-    Args:
-        model_name: Name of the model to evaluate
-        patient_case_filepath: Path to file containing patient cases
-        model_output_filepath: Path to file containing model outputs
-        output_directory: Directory to save evaluation results
-        use_parallel: Whether to use parallel processing
-        
-    Returns:
-        None
-    """
+    """Orchestrate the evaluation process for a specific model."""
     # Create output directory if it doesn't exist
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
@@ -155,15 +92,15 @@ def main(model_name, patient_case_filepath, model_output_filepath, output_direct
     completed_case_ids = [name.split('.')[0] for name in completed_cases]
     
     for case_id in patient_cases.keys():
-        if case_id not in completed_case_ids:
-            case_data = patient_cases[case_id]
+        if case_id not in completed_case_ids and case_id in model_outputs and model_name in model_outputs[case_id]:
+            case_data = patient_cases[case_id].copy()  # Create a copy to avoid modifying the original
             case_data['id'] = case_id
             case_data['results'] = model_outputs[case_id][model_name]
             cases_to_evaluate.append(case_data)    
     
-    print(f'Total cases to evaluate: {len(cases_to_evaluate)}')
+    logger.info(f'Total cases to evaluate: {len(cases_to_evaluate)}')
     
-    if use_parallel and len(cases_to_evaluate) > 0:
+    if use_parallel and len(cases_to_evaluate) > 1:
         # Parallel processing approach
         manager = multiprocessing.Manager()
         task_queue = manager.Queue()
@@ -175,6 +112,8 @@ def main(model_name, patient_case_filepath, model_output_filepath, output_direct
         # Create and start worker processes
         processes = []
         worker_count = min(NUM_WORKERS, len(cases_to_evaluate))
+        logger.info(f"Starting {worker_count} worker processes")
+        
         for _ in range(worker_count):
             process = multiprocessing.Process(target=worker_process, args=(task_queue,))
             process.start()
@@ -187,6 +126,8 @@ def main(model_name, patient_case_filepath, model_output_filepath, output_direct
         # Sequential processing approach
         for case_data in cases_to_evaluate:
             evaluate_case(case_data, output_directory, model_name)
+    
+    logger.info(f"Evaluation completed for model {model_name}")
 
 
 if __name__ == '__main__':
@@ -197,13 +138,21 @@ if __name__ == '__main__':
                       help='Model to evaluate')
     parser.add_argument('--sequential', action='store_true', 
                       help='Run sequentially instead of using parallel processing')
+    parser.add_argument('--output-dir', type=str, default='./acc_results',
+                      help='Base directory for evaluation results')
+    parser.add_argument('--patient-cases', type=str,
+                      default='../../../data/MedRBench/treatment_496_cases_with_rare_disease_165.json',
+                      help='Path to patient cases file')
+    parser.add_argument('--model-outputs', type=str,
+                      default='../../../data/InferenceResults/treatment_planning.json',
+                      help='Path to model outputs file')
     
     args = parser.parse_args()
     
     # Define input and output file paths
-    model_output_filepath = '../../../data/InferenceResults/treatment_planning.json'
-    patient_case_filepath = '../../../data/MedRBench/treatment_496_cases_with_rare_disease_165.json'
-    output_directory = f'./acc_results/{args.model}'
+    model_output_filepath = args.model_outputs
+    patient_case_filepath = args.patient_cases
+    output_directory = f'{args.output_dir}/{args.model}'
     
     # Run main evaluation process
     main(

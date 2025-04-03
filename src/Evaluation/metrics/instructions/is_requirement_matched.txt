@@ -1,0 +1,22 @@
+# Task Overview
+This task aims to accurately analyze the given categories of medical examination items, specific item names, and their testing purposes to determine whether these informations are reflected or covered in the provided reference text.
+
+# Task Requirements
+Given the description to be analyzed, judge whether the medical examination items in the description is the same as or appears in one of the examination items in the reference text, or whether the testing purpose or required information in the description is reflected or covered in the reference text.
+1. If the specific examination item name or its alias mentioned in the description to be analyzed appears in the reference text, output “Yes”.
+2. If the testing purpose or required information mentioned in the description to be analyzed is covered or reflected in the reference text, output “Yes”.
+3. If neither the specific examination item name nor the required information content mentioned in the description to be analyzed appears in the reference text, output “No”.
+
+# Output Requirements
+Only output your judgment result on [the description to be analyzed], with optional values “Yes|No”, do not output any other content.
+
+# Output Format
+[Yes|No]
+
+Below is the description to be analyzed and the reference text:
+
+[Description to be analyzed] 
+{a_info_step}
+
+[Reference text] 
+{gt_info}

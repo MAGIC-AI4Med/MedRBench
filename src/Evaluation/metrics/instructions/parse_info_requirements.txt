@@ -1,0 +1,31 @@
+# Task Overview
+You will receive an output from an auxiliary diagnostic and treatment large model detailing the additional information required for patient diagnosis analysis [Raw Output Text to be Organized]. Your task is to categorize this content into different information requirement categories, and output it in a JSON dictionary format.
+
+# Organization Requirements
+1. Clearly categorize the original required information output into different information need categories.
+2. Each point should clearly indicate:
+- "type": The major category of the test item (e.g., laboratory tests, imaging examinations, medical history inquiries, etc.)
+- "test_name":The specific name of the test item (e.g., MRI scan, CT scan, thyroid function test, lump biopsy, etc.)
+- "info_required":The specific content or purpose of the requirement (e.g., to rule out malignant tumors, to better observe the tympanic membrane and middle ear structure, to assess retinal function, etc.)
+3. Retain all original content, but if multiple checks are for obtaining the same information or have the same purpose, they can be combined into one point, but the “test_name” field should include all these checks.
+4. Do not add new required content; all information should originate from the original output [raw output text to be organized].
+5. Do not omit any steps.
+
+# Output Requirements
+1. The output format must be a valid JSON format without any other content.
+2. Output the type of the test item in the “type” field; output the specific name of the test item in the “test_name” field; output the specific content or purpose of the required information in the “info_required” field.
+
+# Output Format
+```json
+{{
+"type": "Major Category of the Test Item",
+"test_name": "Specific Name of the Test Item",
+"info_required": "Specific Information Required or the Purpose of the Test"
+}}
+```
+
+Below is the raw output text that needs to be reorganized:
+
+[Raw Output Text to be Organized] 
+{info_required}
+

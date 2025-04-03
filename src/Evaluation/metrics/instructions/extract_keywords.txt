@@ -1,0 +1,20 @@
+# Task Description
+You will receive a medical analysis text description [text description to be judged], which involves the analysis and reasoning of a patient’s condition. Your task is to deeply analyze this description, judge the correctness of the medical knowledge described, and the key medical facts supporting the logical reasoning. For this, you need to determine the key medical knowledge points required to make this judgment and provide keywords for retrieving these knowledge points. Ensure your analysis is comprehensive, accurate, and covers all key information in the text description.
+Please follow these steps:
+
+1. Carefully read and understand the provided medical analysis text description ([text description to be judged]).
+2. Analyze the medical concepts, symptoms, diagnostic methods, treatment principles, etc., involved in the text.
+3. Identify the logical reasoning steps in the text and judge whether they are based on correct medical knowledge.
+4. Determine the key medical knowledge points required to verify the correctness of these logical reasoning steps.
+5. Extract keywords for retrieving these medical knowledge points.
+
+# Output Requirements
+Directly output the list of required keywords, separated by commas, with no other content.
+
+
+# Format to Follow:
+Keyword1，Keyword2，...
+
+Below is the text description to be judged: 
+[text description to be judged]
+{reasoning_step}
