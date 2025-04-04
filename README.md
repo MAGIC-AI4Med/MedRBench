@@ -50,7 +50,7 @@ python oracle_diagnose.py
 ```
 
 
-### 3. 评估
+### 3. Evaluation
 The evaluation section assesses the inference results from the models. The evaluation code is located in `Evaluation/metrics/` and includes:
 - `outcome_accuracy_eval.py` Calculates the final accuracy of model outputs. You can choose whether to use web search.
 - `reasoning_eval.py` Evaluates the efficiency, factuality, and completeness of the model's reasoning process, requiring web search.
