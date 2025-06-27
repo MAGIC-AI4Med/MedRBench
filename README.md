@@ -3,6 +3,8 @@ The official code for "Quantifying the Reasoning Abilities of LLMs on Real-world
 
 [Paper (Arxiv version)](https://arxiv.org/abs/2503.04691)
 
+[Snapshots of searched websites](https://huggingface.co/datasets/Henrychur/MedRBench-Knowledge-Snapshots)
+
 ## Introduction
 In this paper, we assess the quality of reasoning processes in Large Language Models (LLMs) within real-world medical contexts. Our contributions are as follows:
 
